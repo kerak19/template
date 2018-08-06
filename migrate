@@ -1,0 +1,2 @@
+#/bin/bash
+migrate -database $(sed -nr 's/url[ \t]+ = "(postgres[^"]+)"/\1/p' ./configs/dev.toml) create -ext .sql -format unix -dir ./migrations "$@"

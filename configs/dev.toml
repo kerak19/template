@@ -1,0 +1,7 @@
+addr                    = ":9000"
+debugMode               = true
+server_shutdown_timeout = 30
+
+[database]
+    migrations  = "./migrations"
+    url         = "postgres://testuser:testpass@127.0.0.1:5432/testdb?sslmode=disable"

@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./docker-compose/postgres/db_init.sql:/docker-entrypoint-initdb.d/db_init.sql" 
