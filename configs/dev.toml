@@ -1,7 +1,8 @@
 addr                    = ":9000"
 debugMode               = true
+jwt_secret              = "secret"
 server_shutdown_timeout = 30
 
 [database]
     migrations  = "./migrations"
-    url         = "postgres://testuser:testpass@127.0.0.1:5432/testdb?sslmode=disable"
+    url         = "postgres://testuser:testpass@127.0.0.1:5432/testdb?sslmode=disable" 

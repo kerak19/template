@@ -3,6 +3,7 @@ package users
 import (
 	"context"
 
+	"github.com/kerak19/template/internal/config"
 	"github.com/kerak19/template/internal/repo/usersdb"
 )
 
@@ -14,5 +15,6 @@ type Users interface {
 
 // Handle is an type gathering user's handlers
 type Handle struct {
-	Users Users
+	Users  Users
+	Config config.Config
 }

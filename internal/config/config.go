@@ -16,6 +16,7 @@ type Database struct {
 type Config struct {
 	Addr                  string        `toml:"addr"`
 	DebugMode             bool          `toml:"debugMode"`
+	JWTSecret             string        `toml:"jwt_secret"`
 	ServerShutdownTimeout time.Duration `toml:"server_shutdown_timeout"`
 
 	Database Database `toml:"database"`

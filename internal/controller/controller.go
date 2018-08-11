@@ -25,7 +25,8 @@ func Controller(ctx context.Context, db *sql.DB, config config.Config, log *logr
 	}
 
 	users := users.Handle{
-		Users: usersModel,
+		Users:  usersModel,
+		Config: config,
 	}
 
 	router.POST("/api/users/", users.Create)
