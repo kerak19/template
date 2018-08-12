@@ -15,6 +15,11 @@ type Users struct {
 	Hasher *argon2.Config
 }
 
+// FetchUserByID returns user based on provided id
+func (u Users) FetchUserByID(ctx context.Context, id int64) (usersdb.User, error) {
+	return usersdb.FetchUserByID(ctx, u.DB, id)
+}
+
 // CreateUser created new user with provided email and password.
 func (u Users) CreateUser(ctx context.Context, login, password string) (usersdb.User, error) {
 	bytePassword, err := u.Hasher.Hash([]byte(password), nil)
@@ -26,7 +31,7 @@ func (u Users) CreateUser(ctx context.Context, login, password string) (usersdb.
 
 // LoginUser is checking whether provided credentials are valid
 func (u Users) LoginUser(ctx context.Context, login, password string) (usersdb.User, error) {
-	user, err := usersdb.FetchUser(ctx, u.DB, login)
+	user, err := usersdb.FetchUserByLogin(ctx, u.DB, login)
 	if err != nil {
 		return user, err
 	}

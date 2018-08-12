@@ -4,6 +4,7 @@ package usersdb
 
 import (
 	"context"
+	"database/sql"
 	"time"
 
 	"github.com/ges-sh/dbug/dbugdb"
@@ -40,10 +41,24 @@ func CreateUser(ctx context.Context, db dbugdb.DB, login string, password []byte
 	return u, err
 }
 
-// FetchUser returns user based on provided login
-func FetchUser(ctx context.Context, db dbugdb.DB, login string) (User, error) {
+func scanUser(row *sql.Row) (User, error) {
 	var u User
-	err := db.QueryRowContext(ctx, `
+	err := row.Scan(
+		&u.ID,
+		&u.Login,
+		&u.Pass,
+		&u.CreatedAt,
+		&u.UpdatedAt,
+		&u.DeletedAt,
+		&u.Status,
+		&u.Role,
+	)
+	return u, err
+}
+
+// FetchUserByID returns user based on provided id
+func FetchUserByID(ctx context.Context, db dbugdb.DB, id int64) (User, error) {
+	row := db.QueryRowContext(ctx, `
 		SELECT
 				id,
 				login,
@@ -55,15 +70,24 @@ func FetchUser(ctx context.Context, db dbugdb.DB, login string) (User, error) {
 				role
 			FROM users
 			WHERE login = $1
-		`, login).Scan(
-		&u.ID,
-		&u.Login,
-		&u.Pass,
-		&u.CreatedAt,
-		&u.UpdatedAt,
-		&u.DeletedAt,
-		&u.Status,
-		&u.Role,
-	)
-	return u, err
+		`)
+	return scanUser(row)
+}
+
+// FetchUserByLogin returns user based on provided login
+func FetchUserByLogin(ctx context.Context, db dbugdb.DB, login string) (User, error) {
+	row := db.QueryRowContext(ctx, `
+		SELECT
+				id,
+				login,
+				pass,
+				created_at,
+				updated_at,
+				deleted_at,
+				status,
+				role
+			FROM users
+			WHERE login = $1
+		`, login)
+	return scanUser(row)
 }
