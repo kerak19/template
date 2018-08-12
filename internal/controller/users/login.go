@@ -51,6 +51,8 @@ func (h Handle) Login(w http.ResponseWriter, r *http.Request,
 
 	errors := validate.Validate(data, loginValidators)
 	if len(errors) != 0 {
+		log.WithField("errors", errors).Debug("Validation errors") // debug only
+		log.Error("Validation error during user creation")
 		request.Fail(w, errors)
 		return
 	}
