@@ -34,14 +34,19 @@ func Controller(ctx context.Context, db *sql.DB, config config.Config, log logru
 	router.GET("/api/me/", users.ByID)
 	router.POST("/api/session/", users.Login)
 
-	authenticationMiddleware := middleware.Authenticate{
+	loggerMiddleware := middleware.Logger{
+		Log:  log,
+		Next: router,
+	}
+
+	authenticateMiddleware := middleware.Authenticate{
 		Users: usersModel,
-		Next:  router,
+		Next:  loggerMiddleware,
 	}
 
 	jwtMiddleware := middleware.JWT{
 		JWTSecret: config.JWTSecret,
-		Next:      authenticationMiddleware,
+		Next:      authenticateMiddleware,
 	}
 
 	return jwtMiddleware

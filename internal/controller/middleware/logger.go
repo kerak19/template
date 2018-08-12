@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"context"
 	"net/http"
 
+	"github.com/kerak19/template/internal/controller/middleware/reqctx"
 	"github.com/sirupsen/logrus"
 )
 
@@ -14,10 +14,20 @@ type Logger struct {
 }
 
 func (l Logger) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	user := reqctx.User(r.Context())
 
+	log := l.Log.WithFields(logrus.Fields{
+		"role": user.Role,
+		"ip":   r.RemoteAddr,
+	})
+
+	if user.Role != "guest" {
+		log = log.WithFields(logrus.Fields{
+			"login": user.Login,
+			"id":    user.ID,
+		})
+	}
+
+	r = r.WithContext(reqctx.WithLogger(r.Context(), log))
 	l.Next.ServeHTTP(w, r)
-}
-
-func withLogger(ctx context.Context, logger logrus.FieldLogger) context.Context {
-	return context.WithValue(ctx, "logger", logger)
 }
