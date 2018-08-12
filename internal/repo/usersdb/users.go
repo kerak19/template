@@ -69,8 +69,8 @@ func FetchUserByID(ctx context.Context, db dbugdb.DB, id int64) (User, error) {
 				status,
 				role
 			FROM users
-			WHERE login = $1
-		`)
+			WHERE id = $1
+		`, id)
 	return scanUser(row)
 }
 

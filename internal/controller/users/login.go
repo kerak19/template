@@ -54,6 +54,7 @@ func (h Handle) Login(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
+	// TODO save session in database
 	authToken, err := h.jwtToken(user.ID)
 	if err != nil {
 		logrus.WithError(err).Error("Error while generating JWT token")

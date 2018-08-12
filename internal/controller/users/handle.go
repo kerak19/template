@@ -11,6 +11,7 @@ import (
 type Users interface {
 	CreateUser(ctx context.Context, login, password string) (usersdb.User, error)
 	LoginUser(ctx context.Context, login, password string) (usersdb.User, error)
+	FetchUserByID(ctx context.Context, id int64) (usersdb.User, error)
 }
 
 // Handle is an type gathering user's handlers

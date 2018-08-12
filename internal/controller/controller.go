@@ -31,11 +31,17 @@ func Controller(ctx context.Context, db *sql.DB, config config.Config, log logru
 	}
 
 	router.POST("/api/users/", users.Create)
+	router.GET("/api/me/", users.ByID)
 	router.POST("/api/session/", users.Login)
+
+	authenticationMiddleware := middleware.Authenticate{
+		Users: usersModel,
+		Next:  router,
+	}
 
 	jwtMiddleware := middleware.JWT{
 		JWTSecret: config.JWTSecret,
-		Next:      router,
+		Next:      authenticationMiddleware,
 	}
 
 	return jwtMiddleware
