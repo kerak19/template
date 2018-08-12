@@ -8,9 +8,12 @@ import (
 	"github.com/kerak19/template/internal/request"
 )
 
-// ByID returns info of user's by id provided in authorization token
-func (h Handle) ByID(w http.ResponseWriter, r *http.Request,
+// Me returns info of user's by id provided in authorization token
+func (h Handle) Me(w http.ResponseWriter, r *http.Request,
 	ps httprouter.Params) {
+	log := reqctx.Logger(r.Context())
 	user := reqctx.User(r.Context())
+
+	log.Info("User fetched his information")
 	request.Success(w, user)
 }

@@ -8,6 +8,7 @@ import (
 // If provided v is not a struct, it'll return empty errors map. If v contains
 // not exported fields, Validate will panic, so it's caller responsibility to make sure
 // all v fields are exported
+// TODO i18n support ?
 func Validate(v interface{}, validators map[string][]Validator) map[string][]string {
 	errors := make(map[string][]string)
 	iterateFields(v, validators, errors)

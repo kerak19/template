@@ -31,7 +31,7 @@ func Controller(ctx context.Context, db *sql.DB, config config.Config, log logru
 	}
 
 	router.POST("/api/users/", users.Create)
-	router.GET("/api/me/", users.ByID)
+	router.GET("/api/me/", users.Me)
 	router.POST("/api/session/", users.Login)
 
 	loggerMiddleware := middleware.Logger{
