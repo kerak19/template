@@ -7,6 +7,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/kerak19/template/internal/config"
+	"github.com/kerak19/template/internal/controller/middleware"
 	"github.com/kerak19/template/internal/controller/users"
 	"github.com/kerak19/template/internal/model"
 	"github.com/lhecker/argon2"
@@ -14,7 +15,7 @@ import (
 )
 
 // Controller is an main router of application.
-func Controller(ctx context.Context, db *sql.DB, config config.Config, log *logrus.Logger) http.Handler {
+func Controller(ctx context.Context, db *sql.DB, config config.Config, log logrus.FieldLogger) http.Handler {
 	router := httprouter.New()
 
 	hasher := argon2.DefaultConfig()
@@ -32,5 +33,10 @@ func Controller(ctx context.Context, db *sql.DB, config config.Config, log *logr
 	router.POST("/api/users/", users.Create)
 	router.POST("/api/session/", users.Login)
 
-	return router
+	jwtMiddleware := middleware.JWT{
+		JWTSecret: config.JWTSecret,
+		Next:      router,
+	}
+
+	return jwtMiddleware
 }
