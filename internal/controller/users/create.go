@@ -47,7 +47,7 @@ func (h Handle) Create(w http.ResponseWriter, r *http.Request,
 		"password_length": len(data.Password),
 	})
 
-	errors := validate.Validate(data, loginValidators)
+	errors := validate.Validate(data, registerValidators)
 	if len(errors) != 0 {
 		log.WithField("errors", errors).Debug("Validation errors") // debug only
 		log.Error("Validation error during user creation")
